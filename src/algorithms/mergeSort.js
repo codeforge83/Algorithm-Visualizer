@@ -1,0 +1,5 @@
+export function mergeSort(values) {
+  const a = [...values], steps = [];
+  function sort(l, r) { if (l >= r) return; const m = Math.floor((l + r) / 2); sort(l, m); sort(m + 1, r); const left = a.slice(l,m+1), right=a.slice(m+1,r+1); let i=0,j=0,k=l; steps.push({type:'range',range:[l,r],line:4,status:`Merging ranges ${l}–${m} and ${m+1}–${r}`}); while(i<left.length&&j<right.length){steps.push({type:'compare',indices:[l+i,m+1+j],line:6,status:`Comparing values for merge`}); a[k]=left[i]<=right[j]?left[i++]:right[j++]; steps.push({type:'overwrite',index:k,value:a[k],line:7,status:`Writing ${a[k]} into position ${k}`});k++;} while(i<left.length){a[k]=left[i++];steps.push({type:'overwrite',index:k,value:a[k],line:9,status:`Copying remaining left value`});k++;} while(j<right.length){a[k]=right[j++];steps.push({type:'overwrite',index:k,value:a[k],line:10,status:`Copying remaining right value`});k++;}}
+  sort(0,a.length-1); steps.push({type:'done',indices:a.map((_,i)=>i),line:12,status:'Array sorted'}); return steps;
+}
